@@ -21,7 +21,7 @@ class Lesson(models.Model):
     description = models.TextField(verbose_name='Содержание урока')
     lesson_preview = models.ImageField(upload_to='materials/lesson_previews', verbose_name='Превью урока', **NULLABLE)
     url_video = models.URLField(verbose_name='Ссылка на видео', **NULLABLE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Создал клиента", **NULLABLE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс", **NULLABLE)
 
     class Meta:
         verbose_name = "Урок"

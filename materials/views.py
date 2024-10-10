@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -9,6 +10,7 @@ from materials.serializers import LessonSerializer, CourseSerializer, CourseDeta
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 
 from users.permissions import IsModer, IsOwner
+from materials.tasks import course_update
 
 
 class CourseViewSet(ModelViewSet):
@@ -33,6 +35,11 @@ class CourseViewSet(ModelViewSet):
         if self.action == 'destroy':
             self.permission_classes = (IsModer | IsOwner,)
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        course_update.delay(instance.pk)
+        return instance
 
 
 class LessonCreateApiView(CreateAPIView):

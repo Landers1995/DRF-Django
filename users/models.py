@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from materials.models import NULLABLE, Course, Lesson
@@ -9,6 +11,7 @@ class User(AbstractUser):
     phone = models.PositiveIntegerField(verbose_name='Телефон', **NULLABLE)
     city = models.CharField(max_length=50, verbose_name='Город', **NULLABLE)
     avatar = models.ImageField(upload_to='users/avatars', verbose_name='Аватар', **NULLABLE)
+    last_login = models.DateTimeField(default=datetime.now, verbose_name="Время последнего посещения", **NULLABLE)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
